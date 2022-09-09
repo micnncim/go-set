@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.go'
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - '**.go'
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        go:
+        - '^1.18'
+        - '^1.19'
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go }}
+        cache: true
+
+    - name: Run test
+      run: |
+        go test -v -race ./...
