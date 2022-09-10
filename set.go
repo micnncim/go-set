@@ -234,12 +234,12 @@ func (s *Set[V]) Values() []V {
 //	s.Union(t) = {a1, a2, a3, a4}
 //	t.Union(s) = {a1, a2, a3, a4}
 func (s *Set[V]) Union(t *Set[V]) *Set[V] {
-	u := s.Clone()
-
 	s.mux.RLock()
 	t.mux.RLock()
 	defer s.mux.RUnlock()
 	defer t.mux.RUnlock()
+
+	u := s.Clone()
 
 	for k := range t.m {
 		u.Insert(k)
