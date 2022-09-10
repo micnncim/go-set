@@ -6,7 +6,7 @@ import (
 	"github.com/micnncim/go-set"
 )
 
-func ExampleSetHas() {
+func ExampleSet_Has() {
 	s := set.New(1, 2)
 
 	fmt.Println(s.Has(1))
@@ -16,7 +16,7 @@ func ExampleSetHas() {
 	// false
 }
 
-func ExampleSetHasAll() {
+func ExampleSet_HasAll() {
 	s := set.New("foo", "bar")
 
 	fmt.Println(s.HasAll("foo", "bar"))
@@ -26,16 +26,18 @@ func ExampleSetHasAll() {
 	// false
 }
 
-func ExampleSetDifference() {
+func ExampleSet_Difference() {
 	s := set.New(1, 2)
 	t := set.New(2, 3)
 
 	fmt.Println(s.Difference(t))
+	fmt.Println(t.Difference(s))
 	// Output:
 	// [1]
+	// [3]
 }
 
-func ExampleSetIntersection() {
+func ExampleSet_Intersection() {
 	s := set.New(1, 2)
 	t := set.New(2, 4)
 
