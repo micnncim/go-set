@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 
 	"github.com/micnncim/go-set"
 )
@@ -372,10 +373,10 @@ func TestSetPopAny(t *testing.T) {
 	}{
 		{
 			name:     "pop",
-			s:        set.New(1, 2),
+			s:        set.New(1),
 			want:     1,
 			wantBool: true,
-			wantSet:  set.New(2),
+			wantSet:  set.New[int](),
 		},
 		{
 			name:     "no pop",
@@ -456,7 +457,9 @@ func TestSetValues(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			if diff := cmp.Diff(tt.want, tt.s.Values()); diff != "" {
+			if diff := cmp.Diff(tt.want, tt.s.Values(), cmpopts.SortSlices(func(i, j int) bool {
+				return i < j
+			})); diff != "" {
 				t.Errorf("(-want +got):\n%s", diff)
 			}
 		})
