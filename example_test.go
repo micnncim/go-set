@@ -9,8 +9,8 @@ import (
 func ExampleSet_Has() {
 	s := set.New(1, 2)
 
-	fmt.Println(s.Has(1))
-	fmt.Println(s.Has(0))
+	fmt.Println(s.Contains(1))
+	fmt.Println(s.Contains(0))
 	// Output:
 	// true
 	// false
@@ -19,8 +19,8 @@ func ExampleSet_Has() {
 func ExampleSet_HasAll() {
 	s := set.New("foo", "bar")
 
-	fmt.Println(s.HasAll("foo", "bar"))
-	fmt.Println(s.HasAll("foo", "bar", "baz"))
+	fmt.Println(s.ContainsAll("foo", "bar"))
+	fmt.Println(s.ContainsAll("foo", "bar", "baz"))
 	// Output:
 	// true
 	// false

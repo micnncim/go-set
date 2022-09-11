@@ -150,7 +150,7 @@ func TestSetHas(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			if diff := cmp.Diff(tt.want, tt.s.Has(tt.v)); diff != "" {
+			if diff := cmp.Diff(tt.want, tt.s.Contains(tt.v)); diff != "" {
 				t.Errorf("(-want +got):\n%s", diff)
 			}
 		})
@@ -186,7 +186,7 @@ func TestSetHasAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			if diff := cmp.Diff(tt.want, tt.s.HasAll(tt.v...)); diff != "" {
+			if diff := cmp.Diff(tt.want, tt.s.ContainsAll(tt.v...)); diff != "" {
 				t.Errorf("(-want +got):\n%s", diff)
 			}
 		})
@@ -222,7 +222,7 @@ func TestSetHasAny(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			if diff := cmp.Diff(tt.want, tt.s.HasAny(tt.v...)); diff != "" {
+			if diff := cmp.Diff(tt.want, tt.s.ContainsAny(tt.v...)); diff != "" {
 				t.Errorf("(-want +got):\n%s", diff)
 			}
 		})
