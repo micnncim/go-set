@@ -6,7 +6,7 @@ import (
 	"github.com/micnncim/go-set"
 )
 
-func ExampleSet_Has() {
+func ExampleSet_Contains() {
 	s := set.New(1, 2)
 
 	fmt.Println(s.Contains(1))
@@ -16,7 +16,7 @@ func ExampleSet_Has() {
 	// false
 }
 
-func ExampleSet_HasAll() {
+func ExampleSet_ContainsAll() {
 	s := set.New("foo", "bar")
 
 	fmt.Println(s.ContainsAll("foo", "bar"))
