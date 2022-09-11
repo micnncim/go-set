@@ -7,8 +7,6 @@
 
 An experimental Go package that defines various methods for a [set](https://en.wikipedia.org/wiki/Set_(abstract_data_type)) implemented with Go generics.
 
-All the methods are thread-safe.
-
 ## Usage
 
 See the [examples](./example_test.go).

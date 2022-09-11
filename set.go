@@ -3,22 +3,16 @@ package set
 
 import (
 	"fmt"
-	"sync"
 )
 
 // Set is a set of comparables.
 type Set[V comparable] struct {
 	m map[V]struct{}
-
-	mux sync.RWMutex
 }
 
 // New returns a Set from the given values.
 func New[V comparable](v ...V) *Set[V] {
-	s := &Set[V]{
-		m:   make(map[V]struct{}),
-		mux: sync.RWMutex{},
-	}
+	s := &Set[V]{make(map[V]struct{})}
 
 	s.Insert(v...)
 
@@ -27,9 +21,6 @@ func New[V comparable](v ...V) *Set[V] {
 
 // Clone returns a new Set that a copy of `s`.
 func (s *Set[V]) Clone() *Set[V] {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	t := New[V]()
 
 	t.Insert(s.Values()...)
@@ -39,9 +30,6 @@ func (s *Set[V]) Clone() *Set[V] {
 
 // Delete removes the given values from `s`.
 func (s *Set[V]) Delete(v ...V) {
-	s.mux.Lock()
-	defer s.mux.Unlock()
-
 	for _, x := range v {
 		delete(s.m, x)
 	}
@@ -56,11 +44,6 @@ func (s *Set[V]) Delete(v ...V) {
 //	s.Difference(t) = {a3}
 //	t.Difference(s) = {a4, a5}
 func (s *Set[V]) Difference(t *Set[V]) *Set[V] {
-	s.mux.RLock()
-	t.mux.RLock()
-	defer s.mux.RUnlock()
-	defer t.mux.RUnlock()
-
 	u := New[V]()
 
 	for k := range s.m {
@@ -80,11 +63,6 @@ func (s *Set[V]) Difference(t *Set[V]) *Set[V] {
 //	t = {a2, a3}
 //	s.Intersection(t) = {a2}
 func (s *Set[V]) Intersection(t *Set[V]) *Set[V] {
-	s.mux.RLock()
-	t.mux.RLock()
-	defer s.mux.RUnlock()
-	defer t.mux.RUnlock()
-
 	u := New[V]()
 
 	var walk, other *Set[V]
@@ -111,28 +89,17 @@ func (s *Set[V]) Intersection(t *Set[V]) *Set[V] {
 // Two sets are equal if their underlying values are identical not considering
 // order.
 func (s *Set[V]) Equal(t *Set[V]) bool {
-	s.mux.RLock()
-	t.mux.RLock()
-	defer s.mux.RUnlock()
-	defer t.mux.RUnlock()
-
 	return len(s.m) == len(t.m) && s.IsSuperset(t)
 }
 
 // Has returns true iff `s` contains a given value.
 func (s *Set[V]) Has(v V) bool {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	_, ok := s.m[v]
 	return ok
 }
 
 // HasAny returns true iff `s` contains all the given values.
 func (s *Set[V]) HasAll(v ...V) bool {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	for _, x := range v {
 		if !s.Has(x) {
 			return false
@@ -144,9 +111,6 @@ func (s *Set[V]) HasAll(v ...V) bool {
 
 // HasAll returns true iff `s` contains any of the given values.
 func (s *Set[V]) HasAny(v ...V) bool {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	for _, x := range v {
 		if s.Has(x) {
 			return true
@@ -158,9 +122,6 @@ func (s *Set[V]) HasAny(v ...V) bool {
 
 // Insert adds the given values to `s`.
 func (s *Set[V]) Insert(v ...V) {
-	s.mux.Lock()
-	defer s.mux.Unlock()
-
 	for _, x := range v {
 		s.m[x] = struct{}{}
 	}
@@ -168,11 +129,6 @@ func (s *Set[V]) Insert(v ...V) {
 
 // IsSuperset returns true iff `t` is a superset of `s`.
 func (s *Set[V]) IsSuperset(t *Set[V]) bool {
-	s.mux.RLock()
-	t.mux.RLock()
-	defer s.mux.RUnlock()
-	defer t.mux.RUnlock()
-
 	for k := range t.m {
 		if !s.Has(k) {
 			return false
@@ -184,17 +140,11 @@ func (s *Set[V]) IsSuperset(t *Set[V]) bool {
 
 // Len returns the size of `s`.
 func (s *Set[V]) Len() int {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	return len(s.m)
 }
 
 // Pop returns a single value randomly chosen and removes it from `s`.
 func (s *Set[V]) PopAny() (v V, _ bool) {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	for k := range s.m {
 		delete(s.m, k)
 		return k, true
@@ -205,17 +155,11 @@ func (s *Set[V]) PopAny() (v V, _ bool) {
 
 // String implements fmt.Stringer.
 func (s *Set[V]) String() string {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	return fmt.Sprint(s.Values())
 }
 
 // Values returns the underlying values of `s`.
 func (s *Set[V]) Values() []V {
-	s.mux.RLock()
-	defer s.mux.RUnlock()
-
 	v := make([]V, 0, len(s.m))
 
 	for k := range s.m {
@@ -234,11 +178,6 @@ func (s *Set[V]) Values() []V {
 //	s.Union(t) = {a1, a2, a3, a4}
 //	t.Union(s) = {a1, a2, a3, a4}
 func (s *Set[V]) Union(t *Set[V]) *Set[V] {
-	s.mux.RLock()
-	t.mux.RLock()
-	defer s.mux.RUnlock()
-	defer t.mux.RUnlock()
-
 	u := s.Clone()
 
 	for k := range t.m {
