@@ -98,7 +98,7 @@ func (s *Set[V]) Contains(v V) bool {
 	return ok
 }
 
-// HasAny returns true iff `s` contains all the given values.
+// ContainsAny returns true iff `s` contains all the given values.
 func (s *Set[V]) ContainsAll(v ...V) bool {
 	for _, x := range v {
 		if !s.Contains(x) {
@@ -109,7 +109,7 @@ func (s *Set[V]) ContainsAll(v ...V) bool {
 	return true
 }
 
-// HasAll returns true iff `s` contains any of the given values.
+// ContainsAll returns true iff `s` contains any of the given values.
 func (s *Set[V]) ContainsAny(v ...V) bool {
 	for _, x := range v {
 		if s.Contains(x) {

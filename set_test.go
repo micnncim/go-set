@@ -121,7 +121,7 @@ func TestSetEqual(t *testing.T) {
 	}
 }
 
-func TestSetHas(t *testing.T) {
+func TestSetContains(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -131,13 +131,13 @@ func TestSetHas(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "has",
+			name: "contains",
 			s:    set.New(1),
 			v:    1,
 			want: true,
 		},
 		{
-			name: "has no int",
+			name: "not contains int",
 			s:    set.New(1),
 			v:    2,
 			want: false,
@@ -157,7 +157,7 @@ func TestSetHas(t *testing.T) {
 	}
 }
 
-func TestSetHasAll(t *testing.T) {
+func TestSetContainsAll(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -167,13 +167,13 @@ func TestSetHasAll(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "has all",
+			name: "contains",
 			s:    set.New(1, 2, 3),
 			v:    []int{1, 2},
 			want: true,
 		},
 		{
-			name: "not has all",
+			name: "not contains all",
 			s:    set.New(1, 2),
 			v:    []int{1, 2, 3},
 			want: false,
@@ -193,7 +193,7 @@ func TestSetHasAll(t *testing.T) {
 	}
 }
 
-func TestSetHasAny(t *testing.T) {
+func TestSetContainsAny(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -203,13 +203,13 @@ func TestSetHasAny(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "has any",
+			name: "contains any",
 			s:    set.New(1, 2),
 			v:    []int{1, 3},
 			want: true,
 		},
 		{
-			name: "not has any",
+			name: "not contains any",
 			s:    set.New(1, 2),
 			v:    []int{3},
 			want: false,
