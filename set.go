@@ -47,7 +47,7 @@ func (s *Set[V]) Difference(t *Set[V]) *Set[V] {
 	u := New[V]()
 
 	for k := range s.m {
-		if !t.Has(k) {
+		if !t.Contains(k) {
 			u.Insert(k)
 		}
 	}
@@ -76,7 +76,7 @@ func (s *Set[V]) Intersection(t *Set[V]) *Set[V] {
 	}
 
 	for k := range walk.m {
-		if other.Has(k) {
+		if other.Contains(k) {
 			u.Insert(k)
 		}
 	}
@@ -92,16 +92,16 @@ func (s *Set[V]) Equal(t *Set[V]) bool {
 	return len(s.m) == len(t.m) && s.IsSuperset(t)
 }
 
-// Has returns true iff `s` contains a given value.
-func (s *Set[V]) Has(v V) bool {
+// Contains returns true iff `s` contains a given value.
+func (s *Set[V]) Contains(v V) bool {
 	_, ok := s.m[v]
 	return ok
 }
 
 // HasAny returns true iff `s` contains all the given values.
-func (s *Set[V]) HasAll(v ...V) bool {
+func (s *Set[V]) ContainsAll(v ...V) bool {
 	for _, x := range v {
-		if !s.Has(x) {
+		if !s.Contains(x) {
 			return false
 		}
 	}
@@ -110,9 +110,9 @@ func (s *Set[V]) HasAll(v ...V) bool {
 }
 
 // HasAll returns true iff `s` contains any of the given values.
-func (s *Set[V]) HasAny(v ...V) bool {
+func (s *Set[V]) ContainsAny(v ...V) bool {
 	for _, x := range v {
-		if s.Has(x) {
+		if s.Contains(x) {
 			return true
 		}
 	}
@@ -130,7 +130,7 @@ func (s *Set[V]) Insert(v ...V) {
 // IsSuperset returns true iff `t` is a superset of `s`.
 func (s *Set[V]) IsSuperset(t *Set[V]) bool {
 	for k := range t.m {
-		if !s.Has(k) {
+		if !s.Contains(k) {
 			return false
 		}
 	}
