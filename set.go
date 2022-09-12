@@ -158,7 +158,7 @@ func (s *Set[V]) String() string {
 	return fmt.Sprint(s.Values())
 }
 
-// Values returns the underlying values of `s`.
+// Values returns the underlying values of `s` as a slice.
 func (s *Set[V]) Values() []V {
 	v := make([]V, 0, len(s.m))
 
