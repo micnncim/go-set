@@ -98,7 +98,7 @@ func (s *Set[V]) Contains(v V) bool {
 	return ok
 }
 
-// ContainsAny returns true iff `s` contains all the given values.
+// ContainsAll returns true iff `s` contains all the given values.
 func (s *Set[V]) ContainsAll(v ...V) bool {
 	for _, x := range v {
 		if !s.Contains(x) {
@@ -109,7 +109,7 @@ func (s *Set[V]) ContainsAll(v ...V) bool {
 	return true
 }
 
-// ContainsAll returns true iff `s` contains any of the given values.
+// ContainsAny returns true iff `s` contains any of the given values.
 func (s *Set[V]) ContainsAny(v ...V) bool {
 	for _, x := range v {
 		if s.Contains(x) {
@@ -143,7 +143,7 @@ func (s *Set[V]) Len() int {
 	return len(s.m)
 }
 
-// Pop returns a single value randomly chosen and removes it from `s`.
+// PopAny returns a single value randomly chosen and removes it from `s`.
 func (s *Set[V]) PopAny() (v V, _ bool) {
 	for k := range s.m {
 		delete(s.m, k)
@@ -158,7 +158,7 @@ func (s *Set[V]) String() string {
 	return fmt.Sprint(s.Values())
 }
 
-// Values returns the underlying values of `s`.
+// Values returns the underlying values of `s` as a slice.
 func (s *Set[V]) Values() []V {
 	v := make([]V, 0, len(s.m))
 
